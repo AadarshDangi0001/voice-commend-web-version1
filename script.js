@@ -30,14 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function toggleSound(state = null) {
-      if (state !== null) {
-          isSoundOn = state;
-      } else {
-          isSoundOn = !isSoundOn;
-      }
-      soundButton.textContent = isSoundOn ? "Sound On" : "Sound Off";
-      if (isSoundOn) speak("Sound On");
-  }
+    if (state !== null) {
+        isSoundOn = state;
+    } else {
+        isSoundOn = !isSoundOn;
+    }
+    soundButton.innerHTML = isSoundOn 
+        ? '<i class="ri-volume-up-line"></i>'   // Sound On Icon
+        : '<i class="ri-volume-mute-line"></i>'; // Sound Off Icon
+    // if (isSoundOn) speak("Sound On");
+}
 
   function startListening() {
       recognition.lang = currentLang;
@@ -99,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (transcript.includes("scroll down")) {
               window.scrollBy({ top: 500, behavior: "smooth" });
               speak("Scrolling down");
-          } else if (transcript.includes("scroll up")) {
+          } else if (transcript.includes("scroll up") || transcript.includes("school app") || transcript.includes("school up")||transcript.includes("school lab"))  {
               window.scrollBy({ top: -500, behavior: "smooth" });
               speak("Scrolling up");
           } else if (transcript.includes("scroll bottom")) {
@@ -112,16 +114,16 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (currentLang === "hi-IN") {
           if (transcript.includes("नीचे करो")) {
               window.scrollBy({ top: 500, behavior: "smooth" });
-              speak("नीचे जा रहा है");
+              speak("niche ja raha hai");
           } else if (transcript.includes("ऊपर करो")) {
               window.scrollBy({ top: -500, behavior: "smooth" });
-              speak("ऊपर जा रहा है");
+              speak("ooper ja raha hai");
           } else if (transcript.includes("पूरा नीचे")) {
               window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-              speak("नीचे जा रहा है");
+              speak("niche ja raha hai");
           } else if (transcript.includes("पूरा ऊपर")) {
               window.scrollTo({ top: 0, behavior: "smooth" });
-              speak("ऊपर जा रहा है");
+              speak("ooper ja raha hai");
           }
       }
 
