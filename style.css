@@ -79,6 +79,10 @@ main {
       color: white;
       width: fit-content;
       border-radius: 1.7em;
+
+        i{
+          font-size: 1rem;
+        }
     }
   }
 }
@@ -500,6 +504,10 @@ img:hover {
 
       button {
         font-size: 1.1rem;
+        i{
+          display: block;
+          font-size: 1rem;
+        }
       }
     }
   }
