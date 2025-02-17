@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const previewButton = document.getElementById("preview-button");
   const soundButton = document.getElementById("sound");
+  const langButton = document.getElementById("lang");
 
   if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
       alert("Your browser does not support speech recognition. Please use Chrome.");
@@ -11,11 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let recognition = new SpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = false;
-  let currentLang = "en-IN"; 
+  let currentLang = "en-IN"; // Default language
   let isListening = false;
   let isSoundOn = false;
+  let isSwitchingLanguage = false;
 
   soundButton.style.display = "none";
+  langButton.style.display = "none"; // Initially hidden
 
   previewButton.addEventListener("click", function () {
       if (!isListening) {
@@ -29,6 +32,10 @@ document.addEventListener("DOMContentLoaded", function () {
       toggleSound();
   });
 
+  langButton.addEventListener("click", function () {
+      switchLanguage(currentLang === "en-IN" ? "hi-IN" : "en-IN");
+  });
+
   function toggleSound(state = null) {
     if (state !== null) {
         isSoundOn = state;
@@ -36,10 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
         isSoundOn = !isSoundOn;
     }
     soundButton.innerHTML = isSoundOn 
-        ? '<i class="ri-volume-up-line"></i>'   // Sound On Icon
-        : '<i class="ri-volume-mute-line"></i>'; // Sound Off Icon
-    // if (isSoundOn) speak("Sound On");
-}
+        ? '<i class="ri-volume-up-line"></i>'
+        : '<i class="ri-volume-mute-line"></i>';
+  }
 
   function startListening() {
       recognition.lang = currentLang;
@@ -47,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
       isListening = true;
       previewButton.textContent = "Stop";
       soundButton.style.display = "inline-block";
+      langButton.style.display = "inline-block"; // Show language button
       console.log("Voice recognition started... Language:", currentLang);
   }
 
@@ -55,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
       isListening = false;
       previewButton.textContent = "Preview";
       soundButton.style.display = "none";
+      langButton.style.display = "none"; // Hide language button
       console.log("Voice recognition stopped.");
   }
 
@@ -62,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!isSoundOn) return;
       let utterance = new SpeechSynthesisUtterance(text);
       let voices = speechSynthesis.getVoices();
-      
+
       if (currentLang === "hi-IN") {
           let hindiVoice = voices.find(voice => voice.lang === "hi-IN");
           if (hindiVoice) utterance.voice = hindiVoice;
@@ -80,36 +88,39 @@ document.addEventListener("DOMContentLoaded", function () {
       let transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
       console.log("You said:", transcript);
 
-      if (transcript.includes("hindi")) {
+      // Switch between Hindi and English via voice command
+      if (transcript.includes("hindi") || transcript.includes("हिंदी")) {
           switchLanguage("hi-IN");
-      } else if (transcript.includes("इंग्लिश")) { 
+      } else if (transcript.includes("english") || transcript.includes("इंग्लिश")) {
           switchLanguage("en-IN");
       }
 
-      // FIXED: Handling variations like "sound of", "sound off", etc.
-      if (transcript.includes("sound on")) {
+      // Control sound via voice command
+      if (transcript.includes("sound on") || transcript.includes("आवाज़ चालू")) {
           toggleSound(true);
-      } else if (transcript.includes("sound off") || transcript.includes("sound of")) {
-          toggleSound(false);
-      } else if (transcript.includes("आवाज चालू")) {
-          toggleSound(true);
-      } else if (transcript.includes("आवाज बंद")) {
+      } else if (transcript.includes("sound off") || transcript.includes("sound of") || transcript.includes("आवाज़ बंद")) {
           toggleSound(false);
       }
 
+      // Stop listening when 'stop' or 'बंद करो' is said
+      if (transcript.includes("stop") || transcript.includes("बंद करो")) {
+          stopListening();
+      }
+
+      // Handling scrolling commands
       if (currentLang === "en-IN") {
           if (transcript.includes("scroll down")) {
               window.scrollBy({ top: 500, behavior: "smooth" });
               speak("Scrolling down");
-          } else if (transcript.includes("scroll up") || transcript.includes("school app") || transcript.includes("school up")||transcript.includes("school lab"))  {
+          } else if (transcript.includes("scroll up")) {
               window.scrollBy({ top: -500, behavior: "smooth" });
               speak("Scrolling up");
-          } else if (transcript.includes("scroll bottom")) {
-              window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-              speak("Scrolling to bottom");
           } else if (transcript.includes("scroll top")) {
               window.scrollTo({ top: 0, behavior: "smooth" });
               speak("Scrolling to top");
+          } else if (transcript.includes("scroll bottom")) {
+              window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+              speak("Scrolling to bottom");
           }
       } else if (currentLang === "hi-IN") {
           if (transcript.includes("नीचे करो")) {
@@ -118,50 +129,32 @@ document.addEventListener("DOMContentLoaded", function () {
           } else if (transcript.includes("ऊपर करो")) {
               window.scrollBy({ top: -500, behavior: "smooth" });
               speak("ooper ja raha hai");
-          } else if (transcript.includes("पूरा नीचे")) {
-              window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-              speak("niche ja raha hai");
           } else if (transcript.includes("पूरा ऊपर")) {
               window.scrollTo({ top: 0, behavior: "smooth" });
-              speak("ooper ja raha hai");
-          }
-      }
-
-      if (transcript.includes("stop") || transcript.includes("बंद करो")) {
-          stopListening();
-      }
-
-      if (currentLang === "en-IN") {
-          if (transcript.includes("go to home")) {
-              speak("Navigating to Home");
-              window.location.href = "index.html";
-          } else if (transcript.includes("go to about")) {
-              speak("Navigating to About");
-              window.location.href = "about.html";
-          } else if (transcript.includes("go to contact")) {
-              speak("Navigating to Contact");
-              window.location.href = "contact.html";
-          }
-      } else if (currentLang === "hi-IN") {
-          if (transcript.includes("होम पेज खोलो")) {
-              speak("होम पेज खोल रहा हूँ");
-              window.location.href = "index.html";
-          } else if (transcript.includes("अबाउट पेज खोलो")) {
-              speak("अबाउट पेज खोल रहा हूँ");
-              window.location.href = "about.html";
-          } else if (transcript.includes("कांटेक्ट पेज खोलो")) {
-              speak("कांटेक्ट पेज खोल रहा हूँ");
-              window.location.href = "contact.html";
+              speak("poora upar ja raha hai");
+          } else if (transcript.includes("पूरा नीचे")) {
+              window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+              speak("poora neeche ja raha hai");
           }
       }
   };
 
   function switchLanguage(lang) {
-      if (currentLang !== lang) {
+      if (currentLang !== lang && !isSwitchingLanguage) {
           console.log("Switching language to:", lang);
+          isSwitchingLanguage = true;
           currentLang = lang;
-          stopListening();
-          startListening();
+
+          // Stop the recognition process first before switching the language
+          recognition.stop();
+
+          // Wait for the recognition to stop completely before restarting it
+          setTimeout(() => {
+              recognition.lang = currentLang;
+              recognition.start(); // Start recognition with the new language
+              langButton.textContent = currentLang === "en-IN" ? "English" : "Hindi"; // Update button text
+              isSwitchingLanguage = false; // Reset the flag after starting recognition
+          }, 500); // 500ms delay to prevent any issues with state
       }
   }
 
@@ -170,11 +163,16 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   recognition.onend = function () {
-      if (isListening) {
+      if (isListening && !isSwitchingLanguage) {
           recognition.start();
       }
   };
 });
+
+
+
+
+
 
 
 

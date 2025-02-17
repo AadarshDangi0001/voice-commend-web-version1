@@ -53,7 +53,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.2rem;
 
     .navtext {
       display: flex;
@@ -70,7 +70,9 @@ main {
       font-size: 1.4rem;
       cursor: pointer;
     }
-
+    #lang {
+      display: none;
+     }
     button {
       cursor: pointer;
       padding: 1rem;
@@ -486,10 +488,12 @@ img:hover {
     .logo {
       width: 4rem;
     }
+    
     .navright {
-      gap: 5rem;
+      gap: 1rem;
       .navtext {
         display: flex;
+        margin-right: 2rem;
         .op {
           opacity: 1;
         }
@@ -503,6 +507,7 @@ img:hover {
       }
 
       button {
+        
         font-size: 1.1rem;
         i{
           display: block;
@@ -563,6 +568,7 @@ img:hover {
       left: 50%;
     }
   }
+
   .view-2 {
     flex-direction: row;
 
