@@ -61,10 +61,17 @@ main {
       align-items: center;
       gap: 2rem;
       display: none;
+      a{
+        color: #444;
+        text-decoration: none;
+        
+      
       p {
         opacity: 0.6;
         cursor: pointer;
+        font-weight: 500;
       }
+    }
     }
     i {
       font-size: 1.4rem;
