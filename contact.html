@@ -20,15 +20,28 @@
             </div>
             <div class="navright">
                 <div class="navtext">
-                    <a href="index.html">Home</a>
-                    <a href="about.html">About</a>
-                    <a href="contact.html">Contact</a>
+                    <a href="index.html"><p class="op">Home</p></a>
+                    <a href="about.html"><p class="op">About</p></a>
+                    <a href="contact.html"><p class="op">Contact</p></a>
                 </div>
                 <button id="lang">English</button>
                 <button id="sound"><i class="ri-volume-down-line"></i></button>
                 <button id="preview-button">Preview</button>
-                <i class="ri-menu-3-line"></i>
+                <i class="ri-menu-3-line" id="menu-icon"></i>
             </div>
+
+                <!-- Side Menu for Mobile -->
+                <div id="side-menu" class="side-menu">
+                    <div class="side-menu-header">
+                        <span>Menu</span>
+                        <i class="ri-close-line" id="close-menu"></i>
+                    </div>
+                    <div class="side-menu-links">
+                        <a href="index.html" class="side-link">Home</a>
+                        <a href="about.html" class="side-link">About</a>
+                        <a href="contact.html" class="side-link">Contact</a>
+                    </div>
+                </div>
             
             
 
@@ -118,6 +131,30 @@
 
       </section>
     </main>
-    <script src="script.js"></script>
+        <script src="script.js"></script>
+        <script>
+            // Side menu logic for contact.html
+            document.addEventListener("DOMContentLoaded", function () {
+                const menuIcon = document.getElementById("menu-icon");
+                const sideMenu = document.getElementById("side-menu");
+                const closeMenu = document.getElementById("close-menu");
+                if (menuIcon && sideMenu && closeMenu) {
+                    menuIcon.addEventListener("click", function () {
+                        sideMenu.classList.add("open");
+                        document.body.style.overflow = "hidden";
+                    });
+                    closeMenu.addEventListener("click", function () {
+                        sideMenu.classList.remove("open");
+                        document.body.style.overflow = "";
+                    });
+                    sideMenu.querySelectorAll(".side-link").forEach(link => {
+                        link.addEventListener("click", function () {
+                            sideMenu.classList.remove("open");
+                            document.body.style.overflow = "";
+                        });
+                    });
+                }
+            });
+        </script>
   </body>
 </html>
