@@ -1,3 +1,55 @@
+/* Side Menu Styles */
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -100vw;
+  width: 70vw;
+  max-width: 320px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.side-menu.open {
+  right: 0;
+}
+.side-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.side-menu-header i {
+  font-size: 2rem;
+  cursor: pointer;
+}
+.side-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2.5rem 1.5rem;
+}
+.side-link {
+  color: #222;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.side-link:hover {
+  color: #007bff;
+}
+@media (min-width: 1020px) {
+  .side-menu {
+    display: none !important;
+  }
+}
 @import url("https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poltawski+Nowy:ital,wght@0,400..700;1,400..700&family=Pontano+Sans:wght@300..700&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap");
 
