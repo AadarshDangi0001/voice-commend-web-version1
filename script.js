@@ -3,6 +3,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const soundButton = document.getElementById("sound");
     const langButton = document.getElementById("lang");
 
+    // Side menu logic
+    const menuIcon = document.getElementById("menu-icon");
+    const sideMenu = document.getElementById("side-menu");
+    const closeMenu = document.getElementById("close-menu");
+
+    if (menuIcon && sideMenu && closeMenu) {
+        menuIcon.addEventListener("click", function () {
+            sideMenu.classList.add("open");
+            document.body.style.overflow = "hidden";
+        });
+        closeMenu.addEventListener("click", function () {
+            sideMenu.classList.remove("open");
+            document.body.style.overflow = "";
+        });
+        // Optional: close menu when clicking a link
+        sideMenu.querySelectorAll(".side-link").forEach(link => {
+            link.addEventListener("click", function () {
+                sideMenu.classList.remove("open");
+                document.body.style.overflow = "";
+            });
+        });
+    }
+
     if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
         alert("Your browser does not support speech recognition. Please use Chrome.");
         return;
